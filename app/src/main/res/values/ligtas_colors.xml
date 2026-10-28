@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ligtas design system (from the Figma export) -->
+    <color name="lg_bg">#090F1C</color>
+    <color name="lg_surface">#141E30</color>
+    <color name="lg_border">#28364C</color>
+    <color name="lg_chip">#203454</color>
+    <color name="lg_field">#19263B</color>
+    <color name="lg_popup">#19263B</color>
+    <color name="lg_sel_bg">#1D283B</color>
+    <color name="lg_sel_border">#849CC2</color>
+    <color name="lg_text">#F5F7FC</color>
+    <color name="lg_muted">#A9B7CD</color>
+    <color name="lg_accent">#8AB5FF</color>
+    <color name="lg_on_accent">#090F1C</color>
+    <color name="lg_danger">#E5484D</color>
+    <color name="lg_danger_border">#F16A6E</color>
+    <color name="lg_danger_text">#FF999C</color>
+    <color name="lg_danger_bg">#321D2B</color>
+    <color name="lg_danger_line">#70404C</color>
+    <color name="lg_ok">#91DCC0</color>
+    <color name="lg_ok_bg">#17352F</color>
+    <color name="lg_warn">#E8BD71</color>
+    <!-- older names kept so nothing breaks -->
+</resources>

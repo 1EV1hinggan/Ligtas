@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Login screen drawn by Compose (LoginScreen.kt). The old XML version is activity_login.xml (fallback). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_ligtas">
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

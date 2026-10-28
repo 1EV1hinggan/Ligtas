@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ligtas</string>
+    <string name="title_select_emergency">Select Emergency Type</string>
+    <string name="greeting_default">Hi, Admin</string>
+    <string name="emergency_earthquake">Earthquake</string>
+    <string name="emergency_shooter">Active Shooter</string>
+    <string name="emergency_fire">Fire</string>
+    <string name="emergency_bomb">Bomb Threat</string>
+    <string name="emergency_chemical">Chemical Leaks</string>
+    <string name="emergency_others">Others</string>
+    <string name="emergency_others_sub">Select to specify</string>
+    <string name="slide_title">Slide to alert everyone</string>
+    <string name="slide_cancel">Cancel</string>
+    <string name="edit_label">Edit</string>
+    <string name="edited_label">Edited</string>
+    <string-array name="campus_areas">
+        <item>Whole campus</item>
+        <item>Main Building</item>
+        <item>Science Building</item>
+        <item>Engineering Building</item>
+        <item>Library</item>
+        <item>Gymnasium</item>
+        <item>Cafeteria</item>
+    </string-array>
+    <string name="status_label">Status</string>
+</resources>

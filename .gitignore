@@ -1,0 +1,27 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# --- Added by Group 7 ---
+.idea/
+.kotlin/
+build/
+*.jks
+*.keystore
+*service-account*.json
+*serviceAccount*.json
+.env
+.env.*
+.vercel/
+node_modules/
