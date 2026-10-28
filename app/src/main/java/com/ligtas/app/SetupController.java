@@ -49,9 +49,6 @@ final class SetupController {
         dialog.getBehavior().setSkipCollapsed(true);
         SetupSheetBridge.attach(dialog, activity, state, new SetupSheetListener() {
             @Override public void onFix(int index) {
-                // Debug line: which row was tapped, and which row the fix list thinks it is
-                android.util.Log.d("LigtasSetup", "onFix index=" + index + " rows=" + (state == null ? -1 : state.getRows().size())
-                        + " fixes=" + fixes.size() + " title=" + (state != null && index < state.getRows().size() ? state.getRows().get(index).getTitle() : "?"));
                 if (index < fixes.size()) fixes.get(index).run();
             }
             @Override public void onConfirmed(int index) { if (index < confirms.size()) confirms.get(index).run(); }
