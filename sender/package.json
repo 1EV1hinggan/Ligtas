@@ -1,0 +1,9 @@
+{
+  "name": "ligtas-sender",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sends Ligtas push alerts. Holds the Firebase Admin key so the Android app never has to.",
+  "engines": { "node": ">=18" },
+  "dependencies": { "firebase-admin": "^12.7.0" },
+  "scripts": { "test": "node test.js" }
+}
