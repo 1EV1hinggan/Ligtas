@@ -10,10 +10,21 @@ import java.util.Set;
 /**
  * Who an alert is aimed at. Each kind of audience knows its own label, who belongs to it and which
  * push topics reach it (polymorphism: the sending code does not care which kind it holds).
+ *
+ * OOP ideas shown here:
+ *  - Abstraction:   Audience is abstract. It declares what every audience must answer
+ *                   (label, inGroup, requiredTopics) without saying how.
+ *  - Inheritance:   Campus, Building and Group extend Audience. BuildingGroup extends Group,
+ *                   so there are two levels of inheritance.
+ *  - Polymorphism:  the sending code calls audience.plan(...) and gets the right behavior
+ *                   whether it holds a Campus, a Building, a Group or a BuildingGroup.
+ *  - Encapsulation: the fields of each subclass are private or protected, and are set only
+ *                   through the constructors.
  */
 public abstract class Audience {
 
     /** One person from the roster. */
+    // A nested class: Member lives inside Audience because only audiences use it.
     public static class Member {
         public final String email, name, role, college, program, building;
         public final int yearLevel;   // 0 = none
@@ -38,6 +49,7 @@ public abstract class Audience {
     }
 
     /** Shown in the alert text and on the status screen, for example "Whole campus" or "CICS · BSIT · Year 2". */
+    // Abstract methods: no body here. Every kind of audience writes its own version.
     public abstract String label();
 
     /** Does this person belong to the group the alert is aimed at (ignoring online weeks)? */
@@ -47,8 +59,9 @@ public abstract class Audience {
     protected abstract List<String> requiredTopics();
 
     /** Turns required topics into one FCM target: "/topics/x" or "condition:'a' in topics && 'b' in topics". */
+    // "final": child classes can use this method but cannot change it.
     protected final String target() {
-        List<String> t = requiredTopics();
+        List<String> t = requiredTopics();   // each child class supplies its own list (polymorphism)
         if (t.size() == 1) return "/topics/" + t.get(0);
         StringBuilder sb = new StringBuilder("condition:");
         for (int i = 0; i < t.size(); i++) {
@@ -69,6 +82,7 @@ public abstract class Audience {
     }
 
     /** Works out where to push and who to skip, using the campus setup (which may be null when it could not be loaded). */
+    // The default plan. Campus and Group override it (method overriding) when they need something different.
     public AudiencePlan plan(CampusConfig config, long when) {
         List<String> targets = new ArrayList<>();
         targets.add(target());
@@ -78,6 +92,7 @@ public abstract class Audience {
     // ------------------------------------------------------------------
 
     /** Everyone on the campus; optionally skipping the program/year groups that are online this week. */
+    // Inheritance: Campus is a kind of Audience.
     public static class Campus extends Audience {
         private final String campusId;
         private final boolean onSiteOnly;
@@ -85,7 +100,7 @@ public abstract class Audience {
 
         @Override public String label() { return "Whole campus"; }
         @Override protected boolean inGroup(Member m) { return true; }
-        @Override public boolean usesSchedule() { return onSiteOnly; }
+        @Override public boolean usesSchedule() { return onSiteOnly; }   // only skips online groups when "on-site only" is chosen
         @Override protected List<String> requiredTopics() {
             List<String> t = new ArrayList<>();
             t.add(TopicNames.campus(campusId));
@@ -102,6 +117,7 @@ public abstract class Audience {
     }
 
     /** Everyone whose roster entry lists this building. */
+    // Inheritance: Building is a kind of Audience.
     public static class Building extends Audience {
         protected final String campusId, building;
         public Building(String campusId, String building) { this.campusId = campusId; this.building = building; }
@@ -122,6 +138,7 @@ public abstract class Audience {
     }
 
     /** A college, a program or a year level (any combination; "" / 0 means all). */
+    // Inheritance: Group is a kind of Audience.
     public static class Group extends Audience {
         protected final String campusId, college, program;
         protected final int yearLevel;
@@ -195,13 +212,15 @@ public abstract class Audience {
     }
 
     /** One group inside one building (both must match). */
+    // Inheritance two levels deep: BuildingGroup is a kind of Group, and Group is a kind of Audience.
     public static class BuildingGroup extends Group {
         private final String building;
         public BuildingGroup(String campusId, String building, String college, String program, int yearLevel) {
-            super(campusId, college, program, yearLevel);
+            super(campusId, college, program, yearLevel);   // let Group store its own fields first
             this.building = building;
         }
 
+        // super.label() calls Group's version, and we add the building name in front.
         @Override public String label() { return building + " · " + super.label(); }
         @Override public Map<String, Object> filters() {
             Map<String, Object> f = super.filters();
@@ -225,6 +244,8 @@ public abstract class Audience {
 
     /**
      * Builds the right kind of audience from what the admin picked.
+     * This is a "factory" method: the caller says what the admin chose, and this method
+     * decides which subclass to create (Campus, Group, Building or BuildingGroup).
      * @param area      the whole-campus label, or a building name
      * @param college   "" = all colleges
      * @param program   "" = all programs
