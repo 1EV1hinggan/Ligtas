@@ -33,6 +33,12 @@ Not signed in; email not verified; not an ADMIN in `roster`; single-phone target
 unknown fields; over-long text; more than 40 alerts a minute from one admin. The sender name shown on phones comes from the
 roster, so it cannot be faked. Tests: `npm test` (no network), `node test_handler.js`.
 
+## Campus check
+An admin whose roster entry has a `campus` can only alert that campus. The check is in `lib/campus.js` and runs in
+`api/send.js` after the admin check. Targets for another campus, or with no campus at all, are refused with 403.
+Admins with no `campus` are not limited yet. Teacher topics (`teach_*`) carry no campus name, so they are allowed for now.
+Tests: `npm test`.
+
 ## Part B: rename the package (after Part A works)
 `com.example.a1st2` is a placeholder; Google Play and Firebase want your own, e.g. `ph.edu.batstate.ligtas`.
 1. Android Studio > Project view > switch to "Project" > right-click `java/com/example` > Refactor > Rename > the
