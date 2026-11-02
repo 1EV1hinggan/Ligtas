@@ -28,10 +28,8 @@ function campusProblem(adminCampus, target, type) {
   const campusTopics = topics.filter((t) => t.startsWith("campus_"));
   if (campusTopics.some((t) => t !== "campus_" + mine)) return "You can only alert your own campus.";
   if (campusTopics.length) return "";
-  // No campus topic at all. Two cases are still allowed:
-  //  - the older all-campus topic, only for All clear / False alarm (the app falls back to it for old alerts)
-  //  - teacher topics (teach_*, teachp_*), which the app does not tie to a campus yet (known gap)
-  if (topics.length && topics.every((t) => t.startsWith("teach_") || t.startsWith("teachp_"))) return "";
+  // No campus topic at all. One case is still allowed: the older all-campus topic, only for All clear / False alarm
+  // (the app falls back to it for old alerts). Teacher targets now always carry the campus topic too.
   if (topics.length === 1 && topics[0] === LEGACY_ALL && type !== "ALERT") return "";
   return "This alert is not limited to your campus.";
 }

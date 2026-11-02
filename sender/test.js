@@ -19,3 +19,7 @@ assert.strictEqual(ok({ target: "/topics/a", data: { ...d, title_tl: "SUNOG ALER
 bad({ target: "/topics/a", data: { ...d, body_tl: "x".repeat(601) } }, "long taglish body");
 bad(null, "null"); bad({}, "empty");
 console.log("validation tests: all passed");
+// the new teacher target shape built by the app must pass validation
+const tt = "condition:('teach_bsit_2' in topics || 'teach_bsit_all' in topics) && 'campus_alangilan' in topics";
+ok({ target: tt, data: d, ttl: 1800 });
+console.log("teacher target validation: passed");

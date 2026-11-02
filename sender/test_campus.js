@@ -14,9 +14,11 @@ no("alangilan", "/topics/role_student");                         // no campus at
 no("alangilan", "/topics/ligtas_campus");                        // old all-campus topic cannot send a new ALERT
 ok("alangilan", "/topics/ligtas_campus", "ALL_CLEAR");           // but the app's all-clear fallback still works
 ok("alangilan", "/topics/ligtas_campus", "FALSE_ALARM");
-ok("alangilan", "condition:'teach_bsit_2' in topics || 'teach_bsit_all' in topics");   // teacher topics (known gap)
-ok("alangilan", "/topics/teachp_bsit");
-no("alangilan", "condition:'teach_bsit_2' in topics && 'role_student' in topics");
+ok("alangilan", "condition:('teach_bsit_2' in topics || 'teach_bsit_all' in topics) && 'campus_alangilan' in topics");   // teachers, inside the campus
+ok("alangilan", "condition:'teachp_bsit' in topics && 'campus_alangilan' in topics");
+no("alangilan", "condition:('teach_bsit_2' in topics || 'teach_bsit_all' in topics) && 'campus_lipa' in topics");
+no("alangilan", "condition:'teach_bsit_2' in topics || 'teach_bsit_all' in topics");       // teacher topics with no campus: blocked now
+no("alangilan", "/topics/teachp_bsit");
 console.log("campus tests: all passed");
 const { alertProblem } = require("./lib/campus");
 assert.strictEqual(alertProblem("alangilan", ["/topics/campus_alangilan"]), "");
