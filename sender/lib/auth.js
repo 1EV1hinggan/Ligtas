@@ -10,7 +10,7 @@ function init() {
   return admin;
 }
 
-/** Returns { email, name } for a verified roster admin, or sends the error response and returns null. */
+/** Returns { email, name, campus } for a verified roster admin, or sends the error response and returns null. */
 async function requireAdmin(req, res) {
   const header = req.headers.authorization || "";
   const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";
@@ -22,7 +22,7 @@ async function requireAdmin(req, res) {
   if (!email || decoded.email_verified !== true) { res.status(403).json({ error: "Email not verified" }); return null; }
   const snap = await admin.firestore().doc("roster/" + email).get();
   if (!snap.exists || snap.get("role") !== "ADMIN") { res.status(403).json({ error: "Admins only" }); return null; }
-  return { email, name: snap.get("name") || email };
+  return { email, name: snap.get("name") || email, campus: snap.get("campus") || "" };
 }
 
 module.exports = { init, requireAdmin };

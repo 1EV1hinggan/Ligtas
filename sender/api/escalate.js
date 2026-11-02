@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   const mode = body.mode === "auto" ? "auto" : "manual";
   try {
     const env = { db: admin.firestore(), messaging: admin.messaging(), stamp: (ms) => admin.firestore.Timestamp.fromMillis(ms) };
-    const r = await escalateAlert(env, alertId, { by: who.email, mode });
+    const r = await escalateAlert(env, alertId, { by: who.email, mode, adminCampus: who.campus });
     return res.status(200).json({ ok: true, ...r });
   } catch (e) {
     if (e instanceof EscalationError) return res.status(e.status).json({ error: e.message });

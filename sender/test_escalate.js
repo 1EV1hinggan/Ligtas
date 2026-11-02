@@ -70,6 +70,13 @@ const fails = async (p, status) => { try { await p; assert.fail("should have thr
   s = setup(); ["b", "c", "d"].forEach((k) => { s.docs[`alerts/A1/acks/${k}@s.edu`] = { ackedAt: 1 }; });
   r = await escalateAlert(s.env, "A1", { mode: "manual" });
   assert.strictEqual(r.targeted, 0); assert.strictEqual(s.sent.length, 0); assert.strictEqual(s.docs["alerts/A1"].escalations, undefined);
+  // campus: an admin tied to another campus cannot re-alert this alert; the right campus, or no campus, can
+  s = setup({ targets: ["/topics/campus_alangilan"] });
+  await fails(escalateAlert(s.env, "A1", { by: "x", mode: "manual", adminCampus: "lipa" }), 403);
+  assert.strictEqual(s.sent.length, 0); assert.strictEqual(s.docs["alerts/A1"].escalations, undefined);
+  r = await escalateAlert(setup({ targets: ["/topics/campus_alangilan"] }).env, "A1", { by: "x", mode: "manual", adminCampus: "Alangilan" }); assert.strictEqual(r.round, 1);
+  r = await escalateAlert(setup({ targets: ["/topics/campus_alangilan"] }).env, "A1", { by: "x", mode: "manual" }); assert.strictEqual(r.round, 1);   // no campus: not limited
+  r = await escalateAlert(setup().env, "A1", { by: "x", mode: "manual", adminCampus: "lipa" }); assert.strictEqual(r.round, 1);                       // old alert, no targets saved: allowed
   // the shared countdown rule
   assert.strictEqual(nextAutoDue({ status: "ACTIVE", autoEscalateMin: 5, sentAt: { toMillis: () => 1000 } }), 301000);
   assert.strictEqual(nextAutoDue({ status: "ACTIVE", autoEscalateMin: 0, sentAt: { toMillis: () => 1000 } }), 0);

@@ -7,6 +7,8 @@
 //   - only people who have NOT acknowledged are contacted, and only phones that still have a token
 //   - the round is claimed inside a transaction, so two callers at the same moment cannot both send it
 
+const { alertProblem } = require("./campus");
+
 const MAX_MANUAL = 5, MAX_AUTO = 3, COOLDOWN_MS = 45 * 1000, TTL_SECONDS = 15 * 60, MAX_AGE_MS = 6 * 60 * 60 * 1000;
 
 class EscalationError extends Error {
@@ -36,6 +38,8 @@ async function escalateAlert(env, alertId, opts) {
     if (!snap.exists) throw new EscalationError(404, "Alert not found.");
     alert = snap.data();
     if ((alert.status || "ACTIVE") !== "ACTIVE") throw new EscalationError(409, "This alert has already ended.");
+    const outside = alertProblem(opts.adminCampus, alert.targets);   // admins tied to a campus cannot re-alert another campus
+    if (outside) throw new EscalationError(403, "This alert belongs to another campus.");
     const recips = Array.isArray(alert.recipients) ? alert.recipients : [];
     if (!recips.length) throw new EscalationError(422, "This alert has no named recipient list (large audiences keep counts only), so people cannot be re-alerted one by one.");
     const sentAt = millis(alert.sentAt);

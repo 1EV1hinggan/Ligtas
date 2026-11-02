@@ -5,5 +5,5 @@
   "description": "Sends Ligtas push alerts. Holds the Firebase Admin key so the Android app never has to.",
   "engines": { "node": ">=18" },
   "dependencies": { "firebase-admin": "^12.7.0" },
-  "scripts": { "test": "node test.js && node test_handler.js && node test_campus.js && node test_handler_campus.js" }
+  "scripts": { "test": "node test.js && node test_handler.js && node test_campus.js && node test_handler_campus.js && node test_escalate.js" }
 }
