@@ -27,3 +27,10 @@ assert(alertProblem("alangilan", ["/topics/campus_alangilan", "/topics/campus_li
 assert.strictEqual(alertProblem("alangilan", undefined), "");
 assert.strictEqual(alertProblem("", ["/topics/campus_lipa"]), "");
 console.log("alert campus tests: all passed");
+const { missingCampus } = require("./lib/campus");
+assert.strictEqual(missingCampus("", undefined), "");          // setting off: nobody is refused
+assert.strictEqual(missingCampus("", "false"), "");
+assert(missingCampus("", "true"));                            // setting on: no campus is refused
+assert(missingCampus("  ", "TRUE"));
+assert.strictEqual(missingCampus("alangilan", "true"), "");
+console.log("require-campus tests: all passed");

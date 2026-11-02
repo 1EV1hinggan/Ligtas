@@ -47,4 +47,13 @@ function alertProblem(adminCampus, targets) {
   return "";
 }
 
-module.exports = { slug, topicsOf, campusProblem, alertProblem };
+/**
+ * When the server setting REQUIRE_ADMIN_CAMPUS is "true", an admin with no campus is refused (returns a message).
+ * Leave the setting off until every admin has a campus (console > Admins), then turn it on.
+ */
+function missingCampus(adminCampus, requireSetting) {
+  if (String(requireSetting || "").toLowerCase() !== "true") return "";
+  return slug(adminCampus) ? "" : "Your admin account is not assigned to a campus yet. Ask an admin to set it in the console.";
+}
+
+module.exports = { slug, topicsOf, campusProblem, alertProblem, missingCampus };

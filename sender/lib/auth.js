@@ -1,5 +1,6 @@
 // Shared by the endpoints added after send.js: who is calling, and are they an admin in the roster?
 const admin = require("firebase-admin");
+const { missingCampus } = require("./campus");
 
 function init() {
   if (!admin.apps.length) {
@@ -22,7 +23,10 @@ async function requireAdmin(req, res) {
   if (!email || decoded.email_verified !== true) { res.status(403).json({ error: "Email not verified" }); return null; }
   const snap = await admin.firestore().doc("roster/" + email).get();
   if (!snap.exists || snap.get("role") !== "ADMIN") { res.status(403).json({ error: "Admins only" }); return null; }
-  return { email, name: snap.get("name") || email, campus: snap.get("campus") || "" };
+  const campus = snap.get("campus") || "";
+  const needs = missingCampus(campus, process.env.REQUIRE_ADMIN_CAMPUS);
+  if (needs) { res.status(403).json({ error: needs }); return null; }
+  return { email, name: snap.get("name") || email, campus };
 }
 
 module.exports = { init, requireAdmin };

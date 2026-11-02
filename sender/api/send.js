@@ -2,7 +2,7 @@
 // Body: { "target": "/topics/x" | "condition:...", "data": { title, body, incoming_alert_id, type, ... }, "ttl": 1800 }
 const admin = require("firebase-admin");
 const { validate } = require("../lib/validate");
-const { campusProblem } = require("../lib/campus");
+const { campusProblem, missingCampus } = require("../lib/campus");
 
 if (!admin.apps.length) {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
   if (v.error) return res.status(400).json({ error: v.error });
 
   // 3b. An admin who belongs to a campus may only alert that campus (admins with no campus set are not limited yet).
-  const why = campusProblem(snap.get("campus"), v.target, v.data.type || "ALERT");
+  const why = missingCampus(snap.get("campus"), process.env.REQUIRE_ADMIN_CAMPUS) || campusProblem(snap.get("campus"), v.target, v.data.type || "ALERT");
   if (why) return res.status(403).json({ error: why });
 
   // Recipients (students, teachers) only ever see "Admin", never which admin sent it, and the phone cannot choose

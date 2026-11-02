@@ -15,7 +15,7 @@ const handler = require("./api/send.js");
 const call = async (method, auth, body) => { let out; const res = { status(c) { out = { c }; return this; }, json(j) { out.j = j; return out; } };
   await handler({ method, headers: auth ? { authorization: "Bearer " + auth } : {}, body }, res); return out; };
 const assert = require("assert");
-(async () => {
+const first = (async () => {
   const d = { title: "FIRE", body: "go", incoming_alert_id: "a1" };
   const mk = (target, type) => ({ target, data: { ...d, type }, ttl: 1800 });
   assert.strictEqual((await call("POST", "good", mk("/topics/campus_alangilan", "ALERT"))).c, 200);
@@ -26,3 +26,14 @@ const assert = require("assert");
   assert.strictEqual(sent.length, 3);
   console.log("handler campus tests: all passed (3 sent, 2 blocked)");
 })();
+first.then(async () => {
+  process.env.REQUIRE_ADMIN_CAMPUS = "true";
+  const body = { target: "/topics/campus_alangilan", data: { title: "FIRE", body: "go", incoming_alert_id: "a2", type: "ALERT" }, ttl: 1800 };
+  const before = sent.length;
+  const r1 = await call("POST", "free", body);          // admin with no campus
+  assert.strictEqual(r1.c, 403); assert(/not assigned to a campus/.test(r1.j.error));
+  assert.strictEqual((await call("POST", "good", body)).c, 200);   // admin with a campus still works
+  assert.strictEqual(sent.length, before + 1);
+  delete process.env.REQUIRE_ADMIN_CAMPUS;
+  console.log("require-campus handler tests: all passed");
+});
