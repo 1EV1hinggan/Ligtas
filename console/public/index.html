@@ -1360,7 +1360,13 @@ function admins() {
   const list = Array.isArray(codes) ? codes : [];
   const rows = list.map((c) => { const exp = msOf(c.expiresAt); const state = c.used ? `used by ${esc(c.usedBy || "?")}` : exp && exp < Date.now() ? "expired" : "unused";
     return `<tr><td><code>${esc(c.code)}</code></td><td>${state}</td><td>${exp ? new Date(exp).toLocaleString() : ""}</td><td>${esc(c.note || "")}</td><td><button class="ghost" data-act="delCode" data-c="${esc(c.code)}">Delete</button></td></tr>`; }).join("");
-  return `<div class="card"><h2>Admins</h2><p class="hint">${adminRows ? adminList.length + " admin" + (adminList.length === 1 ? "" : "s") + ": " + esc(adminList.map((r) => r.name || r.email).join(", ")) : "Loading..."}</p>
+  const noCampus = adminList.filter((r) => !String(r.campus || "").trim()).length;
+  const adminTable = !adminRows ? `<p class="hint">Loading...</p>` : `<table><tr><th>Admin</th><th>Campus</th><th></th></tr>${adminList.map((r) => {
+    const c = String(r.campus || "").trim(), same = c && campusId && c.toLowerCase() === String(campusId).toLowerCase();
+    return `<tr><td>${esc(r.name || "")}<div class="hint">${esc(r.email)}</div></td><td>${c ? esc(c) : '<span class="hint">none: not limited to one campus</span>'}</td>
+      <td>${same || !campusId ? "" : `<button class="sec" data-act="setAdminCampus" data-e="${esc(r.email)}">Set campus to ${esc(campusId)}</button>`}</td></tr>`; }).join("")}</table>
+    ${noCampus ? `<p class="hint"><b>${noCampus}</b> admin${noCampus === 1 ? " has" : "s have"} no campus. Until you set one, ${noCampus === 1 ? "that admin is" : "they are"} not limited to a single campus.</p>` : ""}`;
+  return `<div class="card"><h2>Admins</h2>${adminTable}
     <p class="hint">An admin can use <b>any</b> email address, including a personal Gmail. What makes someone an admin is their roster entry, not their email domain.</p>
     <div class="row"><label class="f">Add an admin by email<input id="newAdminEmail" size="30" placeholder="name@anything.com"></label>
       <label class="f">Name<input id="newAdminName" size="20"></label><button data-act="addAdmin">Make admin</button></div>
@@ -1657,8 +1663,18 @@ document.addEventListener("click", async (e) => {
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { out.className = "status warn"; out.textContent = "Enter a valid email address."; return; }
       if (!confirm(`Make ${email} an admin? Admins can send alerts and change everything here.`)) return;
       try { await setDoc(doc(db, "roster", email), { role: "ADMIN", name: name || "", updatedBy: auth.currentUser.email.toLowerCase(), updatedAt: serverTimestamp() }, { merge: true });
-        out.className = "status ok"; out.textContent = `${email} is now an admin. They can sign in to this console and the app with that email.`; afterChange(); render(); }
+        let note = "";
+        try { if (campusId) await setDoc(doc(db, "roster", email), { campus: campusId, updatedBy: auth.currentUser.email.toLowerCase(), updatedAt: serverTimestamp() }, { merge: true }); }
+        catch (e2) { note = " Their campus could not be set (" + (e2.code || e2.message) + "): use the Set campus button in the list."; }
+        out.className = "status ok"; out.textContent = `${email} is now an admin${campusId && !note ? " of " + campusId : ""}. They can sign in to this console and the app with that email.` + note; afterChange(); render(); }
       catch (e) { out.className = "status bad"; out.textContent = "Rejected: " + (e.code || e.message); }
+      return; }
+    case "setAdminCampus": {
+      const em = b.dataset.e;
+      if (!campusId || !confirm(`Set ${em} to campus "${campusId}"? From then on this admin can only alert and re-alert that campus.`)) return;
+      try { await setDoc(doc(db, "roster", em), { campus: campusId, updatedBy: auth.currentUser.email.toLowerCase(), updatedAt: serverTimestamp() }, { merge: true });
+        adminRows = null; render(); say(`${em} is now an admin of ${campusId}.`, "ok"); }
+      catch (err) { say("Could not set the campus: " + (err.code || err.message), "bad"); }
       return; }
     case "saveDomains": {
       const out = $("domainMsg");
