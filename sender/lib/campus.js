@@ -36,4 +36,17 @@ function campusProblem(adminCampus, target, type) {
   return "This alert is not limited to your campus.";
 }
 
-module.exports = { slug, topicsOf, campusProblem };
+/**
+ * Same rule for an alert that was already sent: every place it was pushed to ("targets" on the alert record) must be
+ * inside the admin's campus. Old alerts with no saved targets cannot be judged, so they are allowed.
+ */
+function alertProblem(adminCampus, targets) {
+  if (!slug(adminCampus) || !Array.isArray(targets)) return "";
+  for (const t of targets) {
+    const why = campusProblem(adminCampus, String(t), "ALL_CLEAR");   // "ALL_CLEAR": the older all-campus topic stays allowed
+    if (why) return why;
+  }
+  return "";
+}
+
+module.exports = { slug, topicsOf, campusProblem, alertProblem };

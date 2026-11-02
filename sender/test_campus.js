@@ -18,3 +18,10 @@ ok("alangilan", "condition:'teach_bsit_2' in topics || 'teach_bsit_all' in topic
 ok("alangilan", "/topics/teachp_bsit");
 no("alangilan", "condition:'teach_bsit_2' in topics && 'role_student' in topics");
 console.log("campus tests: all passed");
+const { alertProblem } = require("./lib/campus");
+assert.strictEqual(alertProblem("alangilan", ["/topics/campus_alangilan"]), "");
+assert(alertProblem("alangilan", ["/topics/campus_lipa"]));
+assert(alertProblem("alangilan", ["/topics/campus_alangilan", "/topics/campus_lipa"]));
+assert.strictEqual(alertProblem("alangilan", undefined), "");
+assert.strictEqual(alertProblem("", ["/topics/campus_lipa"]), "");
+console.log("alert campus tests: all passed");
