@@ -3,6 +3,7 @@ package com.ligtas.app;
 import android.Manifest;
 import android.content.Intent;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -20,6 +21,7 @@ import java.util.function.Supplier;
  * Moved out of MainActivity; the behaviour is unchanged.
  */
 final class SetupController {
+    private static final String TAG = "LigtasSetup";
     private final AppCompatActivity activity;
     private final Supplier<String> userEmail;   // the roster email, known only after sign-in
     private final Runnable onClosed;            // called when the sheet closes so the home screen can refresh
@@ -155,7 +157,8 @@ final class SetupController {
         } catch (Exception e) {
             try {
                 activity.startActivity(PermissionHelper.appDetailsIntent(activity));
-            } catch (Exception ignored) {
+            } catch (Exception e2) {
+                Log.w(TAG, "Could not open app settings", e2);
                 Toast.makeText(activity, "Open Settings > Apps > Ligtas to change this.", Toast.LENGTH_LONG).show();
             }
         }
@@ -175,7 +178,7 @@ final class SetupController {
         try {
             activity.startActivity(PermissionHelper.batteryRequestIntent(activity));
         } catch (Exception e) {
-            startSettings(PermissionHelper.batteryListIntent());
+            Log.w(TAG, "Battery request screen not available", e);
         }
     }
 
@@ -185,8 +188,8 @@ final class SetupController {
             try {
                 activity.startActivity(i);
                 return;
-            } catch (Exception ignored) {
-                // try the next one
+            } catch (Exception e) {
+                Log.w(TAG, "Autostart screen not available, trying the next one", e);
             }
         }
     }

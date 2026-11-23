@@ -52,7 +52,9 @@ public class LigtasMessagingService extends FirebaseMessagingService {
             if (data.get("body_tl") != null) bodyTl = data.get("body_tl");
             try {
                 if (data.get("sent_at") != null) sentAt = Long.parseLong(data.get("sent_at"));
-            } catch (NumberFormatException ignored) { }
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "Bad sent_at value in push: " + data.get("sent_at"));
+            }
         } else if (message.getNotification() != null) {
             // Fallback: notification message (for example from the Firebase console test)
             if (message.getNotification().getTitle() != null) title = message.getNotification().getTitle();
