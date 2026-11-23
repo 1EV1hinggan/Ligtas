@@ -305,7 +305,7 @@ private fun NoteField(state: EditAlertSheetState, listener: EditAlertSheetListen
     BasicTextField(
         value = state.note,
         onValueChange = {
-            if (it.length <= 80) {
+            if (it.length <= AlertTemplate.NOTE_MAX) {
                 state.note = it
                 state.noteError = ""
                 listener.onContentChanged()
@@ -330,7 +330,7 @@ private fun NoteField(state: EditAlertSheetState, listener: EditAlertSheetListen
                     }
                     inner()
                 }
-                Text("${state.note.length}/80", color = c.muted, style = inter(11), modifier = Modifier.padding(start = 10.dp, top = 3.dp))
+                Text("${state.note.length}/${AlertTemplate.NOTE_MAX}", color = c.muted, style = inter(11), modifier = Modifier.padding(start = 10.dp, top = 3.dp))
             }
         },
     )
