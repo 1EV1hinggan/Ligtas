@@ -18,8 +18,8 @@ package com.ligtas.app;
 public abstract class User {
 
     // Private: only this class can change these directly.
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
 
     // Constructor: sets the id and name when a user object is created.
     public User(String id, String name) {
