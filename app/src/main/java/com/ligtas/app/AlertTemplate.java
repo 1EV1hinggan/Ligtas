@@ -33,7 +33,7 @@ public class AlertTemplate {
 
     public String getKey() { return key; }
     public String getLabel() { return label; }
-    public String[] getInstructions() { return instructions; }
+    public String[] getInstructions() { return instructions.clone(); }
     public boolean isNoteRequired() { return noteRequired; }
 
     /** Same order as the tiles on the admin screen. */
