@@ -11,7 +11,7 @@ import java.util.Set;
 public final class AudiencePlan {
 
     /** Keep the push payload small (FCM allows 4 KB). Past this, nobody is skipped. */
-    private static final int MAX_ONLINE_LIST_CHARS = 2500;
+    private static final int MAX_ONLINE_LIST_CHARS = 2000;
 
     public final Audience audience;
     public final List<String> targets;
