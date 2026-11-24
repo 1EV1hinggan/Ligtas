@@ -70,4 +70,16 @@ During an emergency on campus, announcements by text, group chats, or word of mo
 | John Edward Bathan | 25-00966 | System/Design Lead |
 | Aeron Guerra | 25-05697 | Documentation |
 | Levi Hinggan | 25-06830 | Lead Programmer |
+
+## 9. OOP Concepts Demonstrated
+The class diagram is in `docs/UML-Diagram.png`.
+
+| Concept | Plain meaning | Where it is in Ligtas |
+|---|---|---|
+| **Abstraction** | Show only what matters; leave the details to subclasses | `User` and `Alert` are **abstract** classes. They say *what* every user/alert must do (`canSendAlerts()`, `getSeverityLevel()`, `getTitle()`) but not *how*. `Audience` and `SchedulePolicy` are abstract too. |
+| **Encapsulation** | Keep data private and give controlled access | Fields such as an alert's id, instruction and status are `private`. Other classes use getters like `getMessage()` and a setter like `setStatus()`. `RoomReport` is `final` with `final` fields and cleans its input in the constructor. `Mode` is an `enum`, so only valid values exist. |
+| **Inheritance** | A child class reuses its parent | `Student`, `Teacher`, `Administrator` extend `User`. `FireAlert`, `EarthquakeAlert`, `LockdownAlert`, `BombThreatAlert`, `ChemicalLeakAlert`, `CustomAlert` extend `Alert`. `Campus`, `Building` and `Group` extend `Audience` (and `BuildingGroup` extends `Group`). `Fixed` and `Grid` extend `SchedulePolicy`. |
+| **Polymorphism** | Same method call, different behavior | `canSendAlerts()` returns `false` for Student and Teacher but `true` for Administrator. `AlertService.sendAlert()` just calls it and does not care which kind of user it is. Each alert type also answers `getTitle()` its own way, and `AlertTemplate.createAlert()` hands back the right `Alert` subclass. |
+
+Other Java topics used: **arrays** (alert instructions, odd/even week modes), **enum** (`Mode`: ONSITE, ONLINE, VACANT), **exception handling** (try/catch when opening phone settings), **interfaces/abstract methods** (`AlertDispatcher.Host`, `AlertTracker.Callback<T>`), and **collections** (lists and sets of people to alert).
  
