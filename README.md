@@ -82,4 +82,28 @@ The class diagram is in `docs/UML-Diagram.png`.
 | **Polymorphism** | Same method call, different behavior | `canSendAlerts()` returns `false` for Student and Teacher but `true` for Administrator. `AlertService.sendAlert()` just calls it and does not care which kind of user it is. Each alert type also answers `getTitle()` its own way, and `AlertTemplate.createAlert()` hands back the right `Alert` subclass. |
 
 Other Java topics used: **arrays** (alert instructions, odd/even week modes), **enum** (`Mode`: ONSITE, ONLINE, VACANT), **exception handling** (try/catch when opening phone settings), **interfaces/abstract methods** (`AlertDispatcher.Host`, `AlertTracker.Callback<T>`), and **collections** (lists and sets of people to alert).
- 
+
+## 10. Instructions for Running the Program
+**What you need**
+- Windows/Mac/Linux computer with **Android Studio** (we use *Rabbit 1 | 2026.2.1*)
+- The alert sender runs online at `https://ligtas-sender.vercel.app`; you do not need to run it yourself
+- An **Android phone** (Android 7.0 or newer) with a USB cable, or an emulator
+- Internet connection on the phone
+
+**Steps**
+1. Download or clone this repository.
+2. Open the project folder in Android Studio and wait for Gradle to finish syncing.
+3. `google-services.json` is already inside the `app/` folder (our Firebase project is `ligtas-eb260`), so no extra setup is needed for it.
+4. On the phone: **Settings → About phone → tap Build number 7 times**, then turn on **USB debugging** in Developer options.
+5. Plug in the phone, choose it at the top of Android Studio, and press **Run ▶**.
+6. Tap **Sign in with school account**.
+7. Open **Alert Readiness** and turn everything on so alerts can reach the phone.
+
+**Signing in:** Only accounts in our roster can use the app.
+
+**Trying it out**
+1. Phone A signs in as **Student** or **Teacher**.
+2. Phone B (or the emulator) signs in as **Admin**.
+3. Admin selects an emergency type → **Alert everyone**.
+4. Phone A receives the vibrating alert → tap **Acknowledge**.
+5. The Admin's status screen updates live.
