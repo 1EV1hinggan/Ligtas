@@ -1,6 +1,7 @@
 <p align="center">
   <img src="docs/ligtas-banner.svg" alt="Ligtas, campus emergency alert app" width="100%">
 </p>
+
 **Ligtas** is an Android app that sends emergency alerts to people on campus and shows the admins who has answered.
  
 Batangas State University - The National Engineering University, Alangilan Campus (CICS)
@@ -36,6 +37,7 @@ The admin can see who has answered and who hasn't, and can alert the people who 
 How an alert travels:
  
 <img src="docs/how-it-works.svg" alt="How a Ligtas alert travels: admin picks, server checks role, phones get alert, one-tap acknowledge, live status" width="100%">
+
 ## 3. Problem Addressed
  
 During an emergency on campus, announcements by text, group chats or word of mouth are slow and easy to miss, and nobody knows who actually saw the message. Ligtas deals with this by:
@@ -55,6 +57,7 @@ During an emergency on campus, announcements by text, group chats or word of mou
 ## 5. Target Users
  
 <img src="docs/roles.svg" alt="Ligtas user roles" width="100%">
+
 | User | What they do in Ligtas |
 |---|---|
 | Administrator | Sends alerts, watches responses, re-alerts, sends all-clear or false alarm |
@@ -66,6 +69,7 @@ The role comes from the school roster. Nobody picks their own role.
 ## 6. Main Features
  
 <img src="docs/alert-types.svg" alt="Six alert types and the Alert everyone button" width="100%">
+
 - Sign in with the school Google account. The role (Student, Teacher, Admin) comes from a roster.
 - Ready-made templates: Earthquake, Fire, Active Shooter/Lockdown, Bomb Threat, Chemical Leak and Others.
 - Every alert goes out in English and Taglish.
@@ -81,6 +85,7 @@ The role comes from the school roster. Nobody picks their own role.
 - The sender server checks that the sender is an admin, and an admin can only alert their own campus.
 - Alerts, acknowledgments and room reports are saved in Firestore.
 - Admin web console for managing the roster.
+
 ## 7. Technologies Used
  
 | Part | Technology |
@@ -184,6 +189,7 @@ Steps:
 5. Plug in the phone, choose it at the top of Android Studio, and press Run.
 6. Tap "Sign in with school account".
 7. Open Alert Readiness and turn everything on so alerts can reach the phone.
+
 Only accounts in our roster can sign in.
  
 Trying it out:
