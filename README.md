@@ -107,3 +107,38 @@ Other Java topics used: **arrays** (alert instructions, odd/even week modes), **
 3. Admin selects an emergency type → **Alert everyone**.
 4. Phone A receives the vibrating alert → tap **Acknowledge**.
 5. The Admin's status screen updates live.
+
+## 11. Sample Screenshots
+/to be done soon...
+
+## 12. Known Limitations
+- **After a phone restarts**, Android may hold the first alert until the phone is unlocked once, plus about 30 seconds. This is an Android rule, not something our app can change.
+- **Some phone brands** (for example Xiaomi) have their own Autostart and battery settings that apps **cannot read**. The user may need to check them by hand.
+- If the **whole phone** is set to hide lock screen notifications, the app cannot override that setting.
+- The **Do Not Disturb** notice can be hidden even though the phone still vibrates.
+- Alerts need an **internet connection** (no SMS or offline mode).
+- Only **registered roster accounts** can sign in.
+- Some admin and teacher screens are in **English only**.
+- Built on Firebase and Vercel **free plans**, so there are usage limits.
+- **Two-person approval** for critical alerts (bomb threat, lockdown) is only a label; the app does not require a second admin.
+- For very large audiences (over 1,500 people on the roster), per-person delivery tracking is turned off.
+- Firestore security rules and large-scale testing have not been completed.
+- The Java side has no custom exception classes and only a few unit tests so far; the Node sender has its own tests in `sender/`.
+- Tested on a small number of devices only.
+## 13. Future Improvements
+- Translate every screen to Taglish.
+- Add SMS or offline fallback when there is no internet.
+- Add a map or building floor plan for room reports.
+- Add an iPhone version.
+- Make sure automatic re-alerts always run on the server, even when no admin screen is open.
+- Enforce two-person approval for critical alerts.
+- Split the biggest classes (`MainActivity`, `AlertTracker`) and add more unit tests.
+- Add a report/export of past alerts for the school.
+## 14. Project Contributors
+| Name | Student No. | GitHub Username |
+|---|---|---|
+| Nicole Atienza | 25-05756 | nxcsyy |
+| John Edward Bathan | 25-00966 | Eduwarduu |
+| Aeron Guerra | 25-05697 | eron |
+| Levi Hinggan | 25-06830 | 1EV1hinggan |
+
