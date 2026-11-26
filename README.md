@@ -97,7 +97,7 @@ The role comes from the school roster. Nobody picks their own role.
 | Screens (GUI) | Kotlin with Jetpack Compose (our instructor allowed another language for the GUI) |
 | Sign-in, database, push notifications | Firebase: Authentication, Firestore, Cloud Messaging |
 | Small server that sends the pushes | Node.js on Vercel, see the [`sender/`](sender) folder |
-| Admin web console | HTML and JavaScript on Firebase Hosting, see the [`console/`](console) folder |
+| Admin web console | HTML, CSS and JavaScript (separate files) on Firebase Hosting, see the [`console/`](console) folder |
 | Libraries | Google Credential Manager (sign-in), OkHttp (calls the sender server) |
 | Tools | Android Studio, Git, GitHub |
 
@@ -244,7 +244,7 @@ There is no `main()` method. This is an Android project, so the app starts at `L
 - Two-person approval for critical alerts (bomb threat, lockdown) is only a label. The app does not require a second admin.
 - For very large audiences (over 1,500 people on the roster), per-person delivery tracking is turned off.
 - Firestore security rules and large-scale testing are not finished.
-- The Java side has no custom exception classes and only a few unit tests so far. The Node sender has its own tests in `sender/`.
+- The Java side has no custom exception classes. Its 37 unit tests (in app/src/test/) cover the plain-Java classes only; the screens, controllers and AlertService are tested by hand. The Node sender has its own tests in sender/.
 - Tested on a small number of devices only.
 
 ## 13. Future Improvements
@@ -255,7 +255,7 @@ There is no `main()` method. This is an Android project, so the app starts at `L
 - Add an iPhone version.
 - Make automatic re-alerts always run on the server, even when no admin screen is open.
 - Enforce two-person approval for critical alerts.
-- Split the biggest classes (`MainActivity`, `AlertTracker`) and add more unit tests.
+- Split the biggest classes (`MainActivity`, `AlertTracker`) and add tests for the controllers and `AlertService`.
 - Add a report or export of past alerts for the school.
 
 ## 14. Project Contributors
